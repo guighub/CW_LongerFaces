@@ -17,7 +17,7 @@ namespace CW_MoreFacesMod
 
         public static ManualLogSource BepInExLogSource = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 
-        void Awake() // runs when Lethal Company is launched
+        void Awake() // runs when Content Warning is launched
         {
             BepInExLogSource.LogMessage(modGUID + " has loaded successfully.");
 
@@ -31,11 +31,12 @@ namespace CW_MoreFacesMod
     [HarmonyPatch(typeof(PlayerCustomizer), nameof(PlayerCustomizer.OnChangeFaceSize))]
     public static class PlayerCustomizer_Scale_Patcher
     {
-        static float scaleAmount = 2f;
-        static int steps = 20;
+        static float scaleAmount = 2f; // Amount to scale the default setting by
+        static int steps = 20; // Number of scaling steps
         public static void Prefix(ref Vector2 ___visorFaceSizeMinMax, ref Vector2 ___faceSizeMinMax, ref int ___faceSizeStepCount)
         {
             ___visorFaceSizeMinMax = new Vector2(0.025f / scaleAmount, 0.035f * scaleAmount);
+            // I found that the below line actually broke the scaling of the faces and caused desync between the preview and actual visor, so I've left it out.
             //___faceSizeMinMax = new Vector2(0.025f, 0.035f * 2f);
             ___faceSizeStepCount = steps;
 
@@ -53,6 +54,7 @@ namespace CW_MoreFacesMod
 
             for (int i = 0; i < code.Count; i++)
             {
+                // Change any occurence of "3" in the method to be the integer limit
                 if (code[i].opcode == OpCodes.Ldc_I4_3)
                 {
                     code[i] = new CodeInstruction(OpCodes.Ldc_I4, int.MaxValue);
@@ -74,6 +76,7 @@ namespace CW_MoreFacesMod
 
             for (int i = 0; i < code.Count; i++)
             {
+                // Change any occurence of "3" in the method to be the integer limit
                 if (code[i].opcode == OpCodes.Ldc_I4_3)
                 {
                     code[i] = new CodeInstruction(OpCodes.Ldc_I4, int.MaxValue);
@@ -95,6 +98,7 @@ namespace CW_MoreFacesMod
 
             for (int i = 0; i < code.Count; i++)
             {
+                // Change any occurence of "3" in the method to be the integer limit
                 if (code[i].opcode == OpCodes.Ldc_I4_3)
                 {
                     code[i] = new CodeInstruction(OpCodes.Ldc_I4, int.MaxValue);
