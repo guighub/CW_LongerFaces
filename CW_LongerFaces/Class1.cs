@@ -34,7 +34,7 @@ namespace CW_MoreFacesMod
     [HarmonyPatch("Awake")]
     public static class PlayerCustomizer_Scale_Patcher // Makes text scaling range a lot broader
     {
-        static float scaleAmount = 4f;
+        static float scaleAmount = 5f; // Amount to scale original values by
         [HarmonyPostfix]
         public static void Postfix(ref PlayerCustomizer __instance)
         {
@@ -44,7 +44,7 @@ namespace CW_MoreFacesMod
             __instance.visorFaceSizeMinMax.x /= scaleAmount;
             __instance.visorFaceSizeMinMax.y *= scaleAmount;
 
-            __instance.faceSizeStepCount = (int)scaleAmount * 10;
+            __instance.faceSizeStepCount = (int)(scaleAmount * 10);
 
             ContentWarningMoreFacesMod.BepInExLogSource.LogMessage("faceSizeMinMax: " + __instance.faceSizeMinMax.ToString());
             ContentWarningMoreFacesMod.BepInExLogSource.LogMessage("visorFaceSizeMinMax: " + __instance.visorFaceSizeMinMax.ToString());
@@ -72,7 +72,7 @@ namespace CW_MoreFacesMod
     [HarmonyPatch("SetFaceText")]
     class PlayerCustomizer_SetFaceText_Patcher
     {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var code = new List<CodeInstruction>(instructions);
 
@@ -116,7 +116,7 @@ namespace CW_MoreFacesMod
     [HarmonyPatch("RPCA_SetVisorText")]
     class PlayerVisor_RPCA_SetVisorText_Patcher
     {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var code = new List<CodeInstruction>(instructions);
 

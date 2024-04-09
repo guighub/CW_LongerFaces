@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <Authors>guiguig</Authors>
+    <Company>guiguig</Company>
+    <Description>Content Warning mod for longer faces and more</Description>
+    <Copyright>Jaiden Ougland</Copyright>
+    <PackageProjectUrl>https://github.com/guighub/CW_LongerFaces</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/guighub/CW_LongerFaces</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
