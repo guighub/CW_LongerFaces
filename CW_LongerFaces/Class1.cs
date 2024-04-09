@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 using System.Collections.Generic;
 using UnityEngine;
 using BepInEx.Logging;
+using TMPro;
 
 namespace CW_MoreFacesMod
 {
@@ -22,25 +23,48 @@ namespace CW_MoreFacesMod
             BepInExLogSource.LogMessage(modGUID + " has loaded successfully.");
 
             harmony.PatchAll(typeof(PlayerCustomizer_Scale_Patcher));
+            harmony.PatchAll(typeof(PlayerCustomizer_CopyPaste));
             harmony.PatchAll(typeof(PlayerCustomizer_SetFaceText_Patcher));
             harmony.PatchAll(typeof(PlayerCustomizer_RunTerminal_Patcher));
             harmony.PatchAll(typeof(PlayerVisor_RPCA_SetVisorText_Patcher));
         }
     }
 
-    [HarmonyPatch(typeof(PlayerCustomizer), nameof(PlayerCustomizer.OnChangeFaceSize))]
-    public static class PlayerCustomizer_Scale_Patcher
+    [HarmonyPatch(typeof(PlayerCustomizer))]
+    [HarmonyPatch("Awake")]
+    public static class PlayerCustomizer_Scale_Patcher // Makes text scaling range a lot broader
     {
-        static float scaleAmount = 2f; // Amount to scale the default setting by
-        static int steps = 20; // Number of scaling steps
-        public static void Prefix(ref Vector2 ___visorFaceSizeMinMax, ref Vector2 ___faceSizeMinMax, ref int ___faceSizeStepCount)
+        static float scaleAmount = 4f;
+        [HarmonyPostfix]
+        public static void Postfix(ref PlayerCustomizer __instance)
         {
-            ___visorFaceSizeMinMax = new Vector2(0.025f / scaleAmount, 0.035f * scaleAmount);
-            // I found that the below line actually broke the scaling of the faces and caused desync between the preview and actual visor, so I've left it out.
-            //___faceSizeMinMax = new Vector2(0.025f, 0.035f * 2f);
-            ___faceSizeStepCount = steps;
+            __instance.faceSizeMinMax.x /= scaleAmount;
+            __instance.faceSizeMinMax.y *= scaleAmount;
 
-            ContentWarningMoreFacesMod.BepInExLogSource.LogMessage("Ran size limit patcher.");
+            __instance.visorFaceSizeMinMax.x /= scaleAmount;
+            __instance.visorFaceSizeMinMax.y *= scaleAmount;
+
+            __instance.faceSizeStepCount = (int)scaleAmount * 10;
+
+            ContentWarningMoreFacesMod.BepInExLogSource.LogMessage("faceSizeMinMax: " + __instance.faceSizeMinMax.ToString());
+            ContentWarningMoreFacesMod.BepInExLogSource.LogMessage("visorFaceSizeMinMax: " + __instance.visorFaceSizeMinMax.ToString());
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerCustomizer))]
+    [HarmonyPatch("Update")]
+    public static class PlayerCustomizer_CopyPaste // Allows you to paste text into the customizer
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ref TextMeshProUGUI ___faceText, ref PlayerCustomizer __instance)
+        {
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+            {
+                ___faceText.text += GUIUtility.systemCopyBuffer; // Paste from clipboard
+                __instance.typeSound.Play(__instance.gameObject.transform.position, false, 1f, null); // Play the typing sound
+                ContentWarningMoreFacesMod.BepInExLogSource.LogMessage("Pasted text from clipboard.");
+                ContentWarningMoreFacesMod.BepInExLogSource.LogMessage(___faceText.text);
+            }
         }
     }
 
