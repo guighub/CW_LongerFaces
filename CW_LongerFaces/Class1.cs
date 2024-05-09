@@ -13,7 +13,7 @@ namespace CW_MoreFacesMod
     {
         public const string modGUID = "guiguig.CW_LongerFacesMod";
         public const string modName = "Content Warning Longer Faces Mod";
-        public const string modVersion = "1.0.0";
+        public const string modVersion = "1.1.0";
         private readonly Harmony harmony = new Harmony(modGUID); // Creating a Harmony instance which will run the mod
 
         public static ManualLogSource BepInExLogSource = BepInEx.Logging.Logger.CreateLogSource(modGUID);
