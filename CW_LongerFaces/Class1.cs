@@ -2,9 +2,7 @@
 using HarmonyLib;
 using System.Reflection.Emit;
 using System.Collections.Generic;
-using UnityEngine;
 using BepInEx.Logging;
-using TMPro;
 
 namespace CW_MoreFacesMod
 {
