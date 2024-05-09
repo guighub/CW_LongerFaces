@@ -1,8 +1,8 @@
 # CW_LongerFaces
-A Content Warning mod that removes the character limit, increases the text scalability, and adds text pasting (Ctrl+V) to the game.
+A Content Warning mod that removes the character limit and increases the text scalability.
 
 ## Notes
-Everything except the text paste ability is client-side only, unless the other players also have the mod installed.
+This mod is client-side only, unless the other players in your lobby also have the mod installed.
 
 Holding backspace to delete your face text will spam a blank square character, this is normal and is a bug in the base game. I may patch it in the future, but it's not a priority at the moment.
 
