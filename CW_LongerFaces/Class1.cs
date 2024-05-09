@@ -23,8 +23,8 @@ namespace CW_MoreFacesMod
             BepInExLogSource.LogMessage(modGUID + " has loaded successfully.");
 
             harmony.PatchAll(typeof(PlayerCustomizer_Scale_Patcher));
-            harmony.PatchAll(typeof(PlayerCustomizer_CopyPaste));
-            harmony.PatchAll(typeof(PlayerCustomizer_SetFaceText_Patcher));
+            // harmony.PatchAll(typeof(PlayerCustomizer_CopyPaste));
+            // harmony.PatchAll(typeof(PlayerCustomizer_SetFaceText_Patcher));
             harmony.PatchAll(typeof(PlayerCustomizer_RunTerminal_Patcher));
             harmony.PatchAll(typeof(PlayerVisor_RPCA_SetVisorText_Patcher));
         }
@@ -51,6 +51,8 @@ namespace CW_MoreFacesMod
         }
     }
 
+    // Text pasting was officially implemented so no need for this anymore
+    /*
     [HarmonyPatch(typeof(PlayerCustomizer))]
     [HarmonyPatch("Update")]
     public static class PlayerCustomizer_CopyPaste // Allows you to paste text into the customizer
@@ -67,7 +69,10 @@ namespace CW_MoreFacesMod
             }
         }
     }
+    */
 
+    // Function removed from game as of May 3 update
+    /*
     [HarmonyPatch(typeof(PlayerCustomizer))]
     [HarmonyPatch("SetFaceText")]
     class PlayerCustomizer_SetFaceText_Patcher
@@ -89,6 +94,7 @@ namespace CW_MoreFacesMod
             return code;
         }
     }
+    */ 
 
     [HarmonyPatch(typeof(PlayerCustomizer))]
     [HarmonyPatch("RunTerminal")]
@@ -113,7 +119,7 @@ namespace CW_MoreFacesMod
     }
 
     [HarmonyPatch(typeof(PlayerVisor))]
-    [HarmonyPatch("RPCA_SetVisorText")]
+    [HarmonyPatch("SafetyCheckVisorText")]
     class PlayerVisor_RPCA_SetVisorText_Patcher
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
